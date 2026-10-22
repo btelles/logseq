@@ -19,18 +19,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # install NodeJS & pnpm
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
     apt-get update && apt-get install -y nodejs && \
-    corepack enable && corepack prepare pnpm@10.33.0 --activate
+    corepack enable && corepack prepare pnpm@11.28.8 --activate
 
 WORKDIR /data
 
 # build Logseq static resources
-RUN git clone -b master https://github.com/logseq/logseq.git .
+RUN git clone -b master https://github.com/btelles/logseq.git .
 
 RUN pnpm install --config.network-timeout=240000
 
 RUN pnpm release
 
 # Web App Runner image
-FROM nginx:1.24.0-alpine3.17
+FROM nginx:1.31-alpine3.24
 
 COPY --from=builder /data/static /usr/share/nginx/html
