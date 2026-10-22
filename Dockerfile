@@ -28,6 +28,10 @@ RUN git clone -b master https://github.com/btelles/logseq.git .
 
 RUN pnpm install --config.network-timeout=240000
 
+# Cap memory usage to prevent GitHub Actions OOM crashes
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+ENV JVM_OPTS="-Xmx2g"
+
 RUN pnpm release
 
 # Web App Runner image
